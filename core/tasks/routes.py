@@ -1,6 +1,6 @@
 #=================== IMPORTS ======================================
 
-from fastapi import APIRouter,Path,Depends,HTTPException
+from fastapi import APIRouter,Path,Depends,HTTPException,Query
 from fastapi.responses import JSONResponse
 from tasks.schemas import *
 from tasks.models import TaskModel
@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from typing import List
 from datetime import datetime
-
 
 #===================================================================
 
@@ -78,5 +77,11 @@ async def delete_task(task_id:int = Path(...,gt=0),db:Session = Depends(get_db))
     db.delete(task)
     db.commit()
 
+
+
+@router.get("/completed/",response_model=List[TaskResponseSchema])
+async def completed_tasks(db:Session = Depends(get_db)):
+    completed = db.query(TaskModel).filter(TaskModel.is_completed==True).all()
+    return completed
 
 #===================================================================
