@@ -1,6 +1,6 @@
 #=================== IMPORTS ======================================
 
-from fastapi import APIRouter,Path,Depends,HTTPException,Query
+from fastapi import APIRouter,Path,Depends,HTTPException
 from fastapi.responses import JSONResponse
 from tasks.schemas import *
 from tasks.models import TaskModel
