@@ -1,7 +1,14 @@
 from sqlalchemy import Column,String,TEXT,Boolean,func,Integer,DateTime
 from core.database import Base
 from sqlalchemy.orm import relationship
+from passlib.context import CryptContext
 
+
+
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
 
 
 
@@ -20,3 +27,11 @@ class UserModel(Base):
     def __repr__(self):
         return (f'user : {self.id}')
 
+    def hash_password(self,plain_password:str) -> str:
+        return pwd_context.hash(plain_password)
+
+    def verify_password(self,plain_password:str) -> bool:
+        return pwd_context.verify(plain_password,self.password)
+
+    def set_password(self,plain_text:str) -> None:
+        self.password = self.hash_password(plain_text)
