@@ -8,6 +8,7 @@ from auth.basic_auth import get_authenticated_user
 from tasks.routes import router as tasks_routes
 from users.routes import router as users_route
 from users.models import UserModel
+from auth.token_auth import get_authenticated_user_by_token
 
 #=============================================================
 
@@ -37,7 +38,7 @@ def public_route():
     return {"message":"public message"}
 
 @app.get("/private")
-def private_route(user:UserModel = Depends(get_authenticated_user)):
+def private_route(user:UserModel = Depends(get_authenticated_user_by_token)):
     print(user)
     return {"message":"private message"}
 #==============================================================
